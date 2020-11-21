@@ -6,6 +6,6 @@ export class PostDTO {
   title: string;
   body: string;
   creationDate: Date;
-  tags: TagDTO['id'][];
-  authorId: UserDTO['id'][];
+  tags: TagDTO[];
+  author: UserDTO[];
 }
