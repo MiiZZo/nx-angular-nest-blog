@@ -12,9 +12,7 @@ export class UsersService {
   ) {}
 
   async getUser(creteria: Partial<UserDTO>): Promise<UserDTO> {
-    const { password, ...result } = await this.usersRepository.findOne(creteria);
-
-    return result;
+    return await this.usersRepository.findOne(creteria);
   }
 
   async createUser(createUserDTO: CreateUserDTO): Promise<UserDTO> {
@@ -25,7 +23,7 @@ export class UsersService {
     }
 
     const _user = this.usersRepository.create(createUserDTO);
-    const { password, ...user } = await this.usersRepository.save(_user);
+    const user = await this.usersRepository.save(_user);
 
     return user;
   }
