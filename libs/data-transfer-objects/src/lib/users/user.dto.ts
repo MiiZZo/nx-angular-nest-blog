@@ -1,7 +1,7 @@
 import { CommentDTO } from '../posts/commnet.dto';
 import { PostDTO } from '../posts/post.dto';
 
-export interface UserDTO {
+export class UserDTO {
   id: number;
   email: string;
   name: string;
