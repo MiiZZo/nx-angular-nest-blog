@@ -4,5 +4,5 @@ export class CommentDTO {
   id: number;
   text: string;
   author: UserDTO;
-  creationDate: Date;
+  createdAt: Date;
 }
