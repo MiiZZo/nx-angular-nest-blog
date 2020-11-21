@@ -22,9 +22,7 @@ export class UsersService {
       throw new BadRequestException({ message: 'A user with the same email already exists' });
     }
 
-    const _user = this.usersRepository.create(createUserDTO);
-    const user = await this.usersRepository.save(_user);
-
-    return user;
+    const user = this.usersRepository.create(createUserDTO);
+    return await this.usersRepository.save(user);
   }
 }
