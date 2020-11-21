@@ -15,7 +15,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@trombonix/data-transfer-objects": [
+        "libs/data-transfer-objects/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
