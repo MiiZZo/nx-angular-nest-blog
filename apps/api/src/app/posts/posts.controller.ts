@@ -19,7 +19,7 @@ export class PostsController {
 
   @Post()
   async createPost(@Body() createPostDTO: CreatePostDTO): Promise<PostDTO> {
-    return await this.postsService.createPost(createPostDTO);
+    return await this.postsService.createPost(1, createPostDTO);
   }
 
   @Delete('id')
@@ -32,7 +32,7 @@ export class PostsController {
     @Param('id') id: number,
     @Body() CreateCommentDTO: CreateCommentDTO
   ): Promise<CommentDTO> {
-    return await this.postsService.createComment(id, CreateCommentDTO);
+    return await this.postsService.createComment(1, id, CreateCommentDTO);
   }
 
   @Delete('comments/:id')

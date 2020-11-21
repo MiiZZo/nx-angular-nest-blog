@@ -18,8 +18,10 @@ export class PostsService {
     return await this.postsRepository.findOne(id);
   }
 
-  async createPost(createPostDTO: CreatePostDTO): Promise<PostDTO> {
+  async createPost(userId: number, createPostDTO: CreatePostDTO): Promise<PostDTO> {
     const post = this.postsRepository.create(createPostDTO);
+
+    post.authorId = userId;
 
     return await this.postsRepository.save(post);
   }
@@ -28,11 +30,12 @@ export class PostsService {
     return await this.postsRepository.delete({ id });
   }
 
-  async createComment(postId: number, createCommentDTO: CreateCommentDTO): Promise<CommentDTO> {
+  async createComment(userId: number, postId: number, createCommentDTO: CreateCommentDTO): Promise<CommentDTO> {
     const comment = this.commentsRepository.create(createCommentDTO);
     const post = await this.postsRepository.findOne(postId);
 
     comment.post = post;
+    comment.authorId = userId;
 
     return await this.commentsRepository.save(comment);
   }

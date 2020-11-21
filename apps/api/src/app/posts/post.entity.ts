@@ -7,6 +7,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Comment } from './comment.entity';
@@ -23,7 +24,14 @@ export class Post {
   @Column()
   body: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @Column()
+  authorId: number;
+
+  @ManyToOne(() => User, (user) => user.posts, {
+    cascade: true,
+    nullable: false,
+  })
+  @JoinColumn({ name: 'authorId' })
   author: User;
 
   @OneToMany(() => Comment, (comment) => comment.post)

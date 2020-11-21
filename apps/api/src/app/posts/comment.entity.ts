@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 import { Post } from './post.entity';
 
@@ -10,7 +17,14 @@ export class Comment {
   @Column()
   text: string;
 
-  @ManyToOne(() => User, (user) => user.comments)
+  @Column()
+  authorId: number;
+
+  @ManyToOne(() => User, (user) => user.comments, {
+    cascade: true,
+    nullable: false,
+  })
+  @JoinColumn({ name: 'authorId' })
   author: User;
 
   @ManyToOne(() => Post, (post) => post.comments)
