@@ -12,7 +12,7 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get('id')
+  @Get(':id')
   async getPost(@Param('id') id: number): Promise<PostDTO> {
     return this.postsService.getPost(id);
   }
@@ -36,7 +36,7 @@ export class PostsController {
   }
 
   @Delete('comments/:id')
-  async deleteComment(@Param('id') id: number): Promise<DeleteResult> {
-    return await this.postsService.deleteComment(id);
+  async deleteComment(@Param('id') id: number): Promise<void> {
+    await this.postsService.deleteComment(1, id);
   }
 }

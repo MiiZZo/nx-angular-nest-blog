@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentDTO, CreateCommentDTO, CreatePostDTO, PostDTO } from '@trombonix/data-transfer-objects';
 import { Repository, DeleteResult } from 'typeorm';
@@ -15,11 +15,14 @@ export class PostsService {
   ) {}
 
   async getPost(id: number): Promise<PostDTO> {
-    return await this.postsRepository.findOne(id);
+    return await this.postsRepository.findOne(id, { relations: ['comments', 'tags'] });
   }
 
   async createPost(userId: number, createPostDTO: CreatePostDTO): Promise<PostDTO> {
-    const post = this.postsRepository.create(createPostDTO);
+    const post = this.postsRepository.create({
+      ...createPostDTO,
+      comments: [],
+    });
 
     post.authorId = userId;
 
@@ -40,7 +43,13 @@ export class PostsService {
     return await this.commentsRepository.save(comment);
   }
 
-  async deleteComment(id: number): Promise<DeleteResult> {
+  async deleteComment(userId: number, id: number): Promise<DeleteResult> {
+    const comment = await this.commentsRepository.findOne(id);
+
+    if (comment.authorId !== userId) {
+      throw new ForbiddenException('You are not the author of this comment');
+    }
+
     return await this.commentsRepository.delete(id);
   }
 }
