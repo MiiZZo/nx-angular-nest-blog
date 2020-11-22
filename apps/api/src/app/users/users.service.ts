@@ -19,10 +19,18 @@ export class UsersService {
     const userWithTheSameEmail = await this.getUser({ email: createUserDTO.email });
 
     if (userWithTheSameEmail) {
-      throw new BadRequestException({ message: 'A user with the same email already exists' });
+      throw new BadRequestException('A user with the same email already exists');
+    }
+
+    const userWithTheSameName = await this.getUser({ name: createUserDTO.name });
+
+    if (userWithTheSameName) {
+      throw new BadRequestException('A user with the same name already exists');
     }
 
     const user = this.usersRepository.create(createUserDTO);
-    return await this.usersRepository.save(user);
+    const { password, ...result } = await this.usersRepository.save(user);
+
+    return result;
   }
 }
