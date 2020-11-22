@@ -3,6 +3,6 @@ import { UserDTO } from '../users/user.dto';
 export class CommentDTO {
   id: number;
   text: string;
-  author: UserDTO;
+  authorId: UserDTO['id'];
   createdAt: Date;
 }

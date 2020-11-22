@@ -7,5 +7,5 @@ export class PostDTO {
   body: string;
   createdAt: Date;
   tags: TagDTO[];
-  author: UserDTO;
+  authorId: UserDTO['id'];
 }
