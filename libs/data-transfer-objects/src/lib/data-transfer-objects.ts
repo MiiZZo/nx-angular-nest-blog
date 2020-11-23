@@ -5,3 +5,4 @@ export * from './posts/create-comment.dto';
 export * from './posts/create-post.dto';
 export * from './posts/post.dto';
 export * from './posts/tag.dto';
+export * from './auth/sign-in.dto';
