@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateUserDTO, UserDTO } from '@trombonix/data-transfer-objects';
-import { UsersService } from './users.service';
+import {  Controller, Get, Param } from '@nestjs/common';
+import {  UserDTO } from '@trombonix/data-transfer-objects';
+import { UsersService } from './shared/users.service';
 
 @Controller('users')
 export class UsersController {
@@ -9,10 +9,5 @@ export class UsersController {
   @Get(':id')
   async getUser(@Param('id') id: number): Promise<UserDTO> {
     return await this.usersService.getUser({ id });
-  }
-
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDTO): Promise<UserDTO> {
-    return await this.usersService.createUser(createUserDto);
   }
 }
