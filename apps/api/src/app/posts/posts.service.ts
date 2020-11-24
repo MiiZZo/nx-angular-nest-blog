@@ -12,7 +12,7 @@ export class PostsService {
     private readonly postsRepository: Repository<Post>,
     @InjectRepository(Comment)
     private readonly commentsRepository: Repository<Comment>
-  ) {}
+  ) { }
 
   async getPost(id: number): Promise<PostDTO> {
     return await this.postsRepository.findOne(id, { relations: ['comments', 'tags'] });
@@ -29,8 +29,14 @@ export class PostsService {
     return await this.postsRepository.save(post);
   }
 
-  async deletePost(id: number): Promise<DeleteResult> {
-    return await this.postsRepository.delete({ id });
+  async deletePost(userId: number, postId: number): Promise<DeleteResult> {
+    const post = await this.postsRepository.findOne(postId);
+
+    if (post.authorId !== userId) {
+      throw new ForbiddenException('You are not the author of this post');
+    }
+
+    return await this.postsRepository.delete({ id: postId });
   }
 
   async createComment(userId: number, postId: number, createCommentDTO: CreateCommentDTO): Promise<CommentDTO> {

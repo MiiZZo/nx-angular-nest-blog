@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
 import {
   CommentDTO,
@@ -7,36 +16,55 @@ import {
   PostDTO,
 } from '@trombonix/data-transfer-objects';
 import { PostsService } from './posts.service';
+import { IsAuthorizedGuard } from '../auth/shared/is-authorized.guard';
+import { ShouldSkipAuth } from '../auth/shared/should-skip-auth/should-skip-auth.decorator';
 
+@UseGuards(IsAuthorizedGuard)
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @ShouldSkipAuth()
   @Get(':id')
   async getPost(@Param('id') id: number): Promise<PostDTO> {
     return this.postsService.getPost(id);
   }
 
   @Post()
-  async createPost(@Body() createPostDTO: CreatePostDTO): Promise<PostDTO> {
-    return await this.postsService.createPost(1, createPostDTO);
+  async createPost(
+    @Req() req: any,
+    @Body() createPostDTO: CreatePostDTO
+  ): Promise<PostDTO> {
+    const userId = req.session.userId;
+
+    return await this.postsService.createPost(userId, createPostDTO);
   }
 
   @Delete('id')
-  async deletePost(@Param('id') id: number): Promise<DeleteResult> {
-    return this.postsService.deletePost(id);
+  async deletePost(
+    @Req() req: any,
+    @Param('id') id: number
+  ): Promise<DeleteResult> {
+    const userId = req.session.userId;
+
+    return this.postsService.deletePost(userId, id);
   }
 
   @Post(':id/comments')
   async createComment(
+    @Req() req: any,
     @Param('id') id: number,
     @Body() CreateCommentDTO: CreateCommentDTO
   ): Promise<CommentDTO> {
-    return await this.postsService.createComment(1, id, CreateCommentDTO);
+    const userId = req.session.userId;
+
+    return await this.postsService.createComment(userId, id, CreateCommentDTO);
   }
 
   @Delete('comments/:id')
-  async deleteComment(@Param('id') id: number): Promise<void> {
-    await this.postsService.deleteComment(1, id);
+  async deleteComment(@Req() req: any, @Param('id') id: number): Promise<void> {
+    const userId = req.session.userId;
+
+    await this.postsService.deleteComment(userId, id);
   }
 }
