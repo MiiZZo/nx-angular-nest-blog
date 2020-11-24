@@ -20,7 +20,7 @@ import { SharedModule } from './shared/shared.module';
       database: 'nxngnestblog',
       entities: getMetadataArgsStorage().tables.map(tbl => tbl.target),
       synchronize: true,
-      logging: 'all',
+      logging: 'all'
     }),
     AuthModule,
     SharedModule,

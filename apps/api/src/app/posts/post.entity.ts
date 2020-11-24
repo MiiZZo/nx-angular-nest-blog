@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Comment } from './comment.entity';
+import { PostVote } from './post-vote.entity';
 import { Tag } from './tag.entity';
 
 @Entity()
@@ -36,6 +37,9 @@ export class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => PostVote, (postVote) => postVote.post)
+  votes: PostVote[];
 
   @ManyToMany(() => Tag)
   @JoinTable()

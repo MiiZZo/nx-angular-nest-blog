@@ -67,4 +67,25 @@ export class PostsController {
 
     await this.postsService.deleteComment(userId, id);
   }
+
+  @Delete('votes/:voteId')
+  async deleteVote(@Req() req: any, @Param() params) {
+    const userId = req.session.userId;
+
+    return await this.postsService.deleteVote(params.voteId);
+  }
+
+  @Post(':id/votes/like')
+  async likePost(@Req() req: any, @Param('id') id: number) {
+    const userId = req.session.userId;
+
+    return await this.postsService.likePost(userId, id);
+  }
+
+  @Post(':id/votes/dislike')
+  async dislikePost(@Req() req: any, @Param('id') id: number) {
+    const userId = req.session.userId;
+
+    return await this.postsService.dislikePost(userId, id);
+  }
 }

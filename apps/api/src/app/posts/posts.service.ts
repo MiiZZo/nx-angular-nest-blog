@@ -1,8 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentDTO, CreateCommentDTO, CreatePostDTO, PostDTO } from '@trombonix/data-transfer-objects';
 import { Repository, DeleteResult } from 'typeorm';
 import { Comment } from './comment.entity';
+import { PostVote } from './post-vote.entity';
 import { Post } from './post.entity';
 
 @Injectable()
@@ -11,7 +12,9 @@ export class PostsService {
     @InjectRepository(Post)
     private readonly postsRepository: Repository<Post>,
     @InjectRepository(Comment)
-    private readonly commentsRepository: Repository<Comment>
+    private readonly commentsRepository: Repository<Comment>,
+    @InjectRepository(PostVote)
+    private readonly postVotesRepository: Repository<PostVote>
   ) { }
 
   async getPost(id: number): Promise<PostDTO> {
@@ -57,5 +60,49 @@ export class PostsService {
     }
 
     return await this.commentsRepository.delete(id);
+  }
+
+  async likePost(userId: number, postId: number) {
+    const postVote = await this.postVotesRepository.findOne({
+      userId
+    });
+
+    if (postVote) {
+      postVote.value = 1;
+
+      return await this.postVotesRepository.save(postVote);
+    }
+
+    const createdPostVote = this.postVotesRepository.create({
+      postId,
+      userId,
+      value: 1
+    });
+
+    return await this.postVotesRepository.save(createdPostVote);
+  }
+
+  async dislikePost(userId: number, postId: number) {
+    const postVote = await this.postVotesRepository.findOne({
+      userId
+    });
+
+    if (postVote) {
+      postVote.value = -1;
+
+      return await this.postVotesRepository.save(postVote);
+    }
+
+    const createdPostVote = await this.postVotesRepository.create({
+      userId,
+      postId,
+      value: -1
+    });
+
+    return await this.postVotesRepository.save(createdPostVote);
+  }
+
+  async deleteVote(voteId: number) {
+    return await this.postVotesRepository.delete(voteId);
   }
 }
