@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as Redis from 'ioredis';
@@ -17,6 +17,10 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix(globalPrefix);
+
+  app.useGlobalPipes(
+    new ValidationPipe()
+  );
 
   app.use(session({
     name: process.env.SESSION_NAME,
