@@ -11,6 +11,10 @@ export class UsersService {
     private readonly usersRepository: Repository<User>
   ) {}
 
+  async getAll() {
+    return await this.usersRepository.find();
+  }
+
   async getUser(creteria: Partial<UserDTO>): Promise<UserDTO> {
     return await this.usersRepository.findOne(creteria);
   }

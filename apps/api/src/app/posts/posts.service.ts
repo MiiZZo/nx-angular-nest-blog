@@ -1,6 +1,11 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommentDTO, CreateCommentDTO, CreatePostDTO, PostDTO } from '@trombonix/data-transfer-objects';
+import {
+  CommentDTO,
+  CreateCommentDTO,
+  CreatePostDTO,
+  PostDTO,
+} from '@trombonix/data-transfer-objects';
 import { Repository, DeleteResult } from 'typeorm';
 import { Comment } from './comment.entity';
 import { PostVote } from './post-vote.entity';
@@ -15,13 +20,22 @@ export class PostsService {
     private readonly commentsRepository: Repository<Comment>,
     @InjectRepository(PostVote)
     private readonly postVotesRepository: Repository<PostVote>
-  ) { }
+  ) {}
 
-  async getPost(id: number): Promise<PostDTO> {
-    return await this.postsRepository.findOne(id, { relations: ['comments', 'tags'] });
+  async getAll() {
+    return await this.postsRepository.find();
   }
 
-  async createPost(userId: number, createPostDTO: CreatePostDTO): Promise<PostDTO> {
+  async getOne(id: number): Promise<PostDTO> {
+    return await this.postsRepository.findOne(id, {
+      relations: ['comments', 'tags'],
+    });
+  }
+
+  async createPost(
+    userId: number,
+    createPostDTO: CreatePostDTO
+  ): Promise<PostDTO> {
     const post = this.postsRepository.create({
       ...createPostDTO,
       comments: [],
@@ -42,7 +56,11 @@ export class PostsService {
     return await this.postsRepository.delete({ id: postId });
   }
 
-  async createComment(userId: number, postId: number, createCommentDTO: CreateCommentDTO): Promise<CommentDTO> {
+  async createComment(
+    userId: number,
+    postId: number,
+    createCommentDTO: CreateCommentDTO
+  ): Promise<CommentDTO> {
     const comment = this.commentsRepository.create(createCommentDTO);
     const post = await this.postsRepository.findOne(postId);
 
@@ -64,7 +82,7 @@ export class PostsService {
 
   async likePost(userId: number, postId: number) {
     const postVote = await this.postVotesRepository.findOne({
-      userId
+      userId,
     });
 
     if (postVote) {
@@ -76,7 +94,7 @@ export class PostsService {
     const createdPostVote = this.postVotesRepository.create({
       postId,
       userId,
-      value: 1
+      value: 1,
     });
 
     return await this.postVotesRepository.save(createdPostVote);
@@ -84,7 +102,7 @@ export class PostsService {
 
   async dislikePost(userId: number, postId: number) {
     const postVote = await this.postVotesRepository.findOne({
-      userId
+      userId,
     });
 
     if (postVote) {
@@ -96,7 +114,7 @@ export class PostsService {
     const createdPostVote = await this.postVotesRepository.create({
       userId,
       postId,
-      value: -1
+      value: -1,
     });
 
     return await this.postVotesRepository.save(createdPostVote);

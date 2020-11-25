@@ -12,7 +12,7 @@ import {
 import { User } from '../users/user.entity';
 import { Comment } from './comment.entity';
 import { PostVote } from './post-vote.entity';
-import { Tag } from './tag.entity';
+import { Tag } from '../tags/tag.entity';
 
 @Entity()
 export class Post {

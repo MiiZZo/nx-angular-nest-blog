@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
+import { Response } from 'express';
 import {
   CommentDTO,
   CreateCommentDTO,
@@ -25,9 +27,15 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @ShouldSkipAuth()
+  @Get()
+  async getAll() {
+    return this.postsService.getAll();
+  }
+
+  @ShouldSkipAuth()
   @Get(':id')
   async getPost(@Param('id') id: number): Promise<PostDTO> {
-    return this.postsService.getPost(id);
+    return this.postsService.getOne(id);
   }
 
   @Post()

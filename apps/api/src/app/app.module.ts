@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     }),
     AuthModule,
     SharedModule,
+    TagsModule,
   ],
   controllers: [],
   providers: [],
