@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CommentDTO,
@@ -7,6 +7,7 @@ import {
   PostDTO,
 } from '@trombonix/data-transfer-objects';
 import { Repository, DeleteResult } from 'typeorm';
+import { Bookmark } from './bookmark.entity';
 import { Comment } from './comment.entity';
 import { PostVote } from './post-vote.entity';
 import { Post } from './post.entity';
@@ -19,7 +20,9 @@ export class PostsService {
     @InjectRepository(Comment)
     private readonly commentsRepository: Repository<Comment>,
     @InjectRepository(PostVote)
-    private readonly postVotesRepository: Repository<PostVote>
+    private readonly postVotesRepository: Repository<PostVote>,
+    @InjectRepository(Bookmark)
+    private readonly bookmarksRepository: Repository<Bookmark>
   ) {}
 
   async getAll() {
@@ -120,7 +123,45 @@ export class PostsService {
     return await this.postVotesRepository.save(createdPostVote);
   }
 
-  async deleteVote(voteId: number) {
-    return await this.postVotesRepository.delete(voteId);
+  deleteVote(voteId: number) {
+    return this.postVotesRepository.delete(voteId);
+  }
+
+  async createBookmark(userId: number, postId: number): Promise<Bookmark> {
+    const bookmark = await this.bookmarksRepository.findOne({
+      postId,
+      userId
+    });
+
+    if (bookmark) {
+      throw new BadRequestException('The bookmark for this post already exists');
+    }
+
+    const createdBookmark = this.bookmarksRepository.create({
+      postId,
+      userId
+    });
+
+    return this.bookmarksRepository.save(createdBookmark);
+  }
+
+  async deleteBookmark(userId: number, postId: number) {
+    const bookmark = await this.bookmarksRepository.findOne({
+      userId,
+      postId
+    });
+
+    if (!bookmark) {
+      throw new BadRequestException('A bookmark with this id doesn`t exist');
+    }
+
+    if (bookmark.userId !== userId) {
+      throw new ForbiddenException();
+    }
+
+    return this.bookmarksRepository.delete({
+      postId,
+      userId
+    });
   }
 }

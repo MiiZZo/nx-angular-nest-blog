@@ -16,7 +16,9 @@ export class UsersService {
   }
 
   async getUser(creteria: Partial<UserDTO>): Promise<UserDTO> {
-    return await this.usersRepository.findOne(creteria);
+    return await this.usersRepository.findOne(creteria, {
+      relations: ['posts', 'comments', 'bookmarks']
+    });
   }
 
   async getUserWithHisPassword(creteria: Partial<UserDTO>): Promise<User> {

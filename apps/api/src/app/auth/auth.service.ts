@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { compare } from 'bcryptjs';
 import { CreateUserDTO, SignInDTO, UserDTO } from '@trombonix/data-transfer-objects';
 import { UsersService } from '../users/shared/users.service';
 
@@ -19,10 +20,14 @@ export class AuthService {
       throw new BadRequestException('Bad credentials');
     }
 
-    if (user.password !== signInDTO.password) {
+    const passwordsMatched = await compare(signInDTO.password, user.password);
+
+    if (!passwordsMatched) {
       throw new BadRequestException('Bad credentials');
     }
 
-    return user;
+    const { password, ..._user } = user; 
+
+    return _user;
   }
 }

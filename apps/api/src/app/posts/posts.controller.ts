@@ -4,13 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { DeleteResult } from 'typeorm';
-import { Response } from 'express';
 import {
   CommentDTO,
   CreateCommentDTO,
@@ -91,9 +90,23 @@ export class PostsController {
   }
 
   @Post(':id/votes/dislike')
-  async dislikePost(@Req() req: any, @Param('id') id: number) {
+  dislikePost(@Req() req: any, @Param('id') id: number) {
     const userId = req.session.userId;
 
-    return await this.postsService.dislikePost(userId, id);
+    return this.postsService.dislikePost(userId, id);
+  }
+
+  @Post(':id/bookmarks/')
+  createBookmark(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    const userId = req.session.userId;
+
+    return this.postsService.createBookmark(userId, id);
+  }
+
+  @Delete(':id/bookmarks/:id')
+  deleteBookmark(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    const userId = req.session.userId;
+
+    return this.postsService.deleteBookmark(userId, id);
   }
 }

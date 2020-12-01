@@ -13,6 +13,7 @@ import { User } from '../users/user.entity';
 import { Comment } from './comment.entity';
 import { PostVote } from './post-vote.entity';
 import { Tag } from '../tags/tag.entity';
+import { Bookmark } from './bookmark.entity';
 
 @Entity()
 export class Post {
@@ -44,6 +45,9 @@ export class Post {
   @ManyToMany(() => Tag)
   @JoinTable()
   tags: Tag[];
+
+  @OneToMany(() => Bookmark, (Bookmark) => Bookmark.postId)
+  bookmarks: Bookmark[];
 
   @CreateDateColumn()
   createdAt: Date;

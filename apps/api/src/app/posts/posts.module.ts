@@ -5,9 +5,10 @@ import { PostsController } from './posts.controller';
 import { Post } from './post.entity';
 import { Comment } from './comment.entity';
 import { PostVote } from './post-vote.entity';
+import { Bookmark } from './bookmark.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment, PostVote])],
+  imports: [TypeOrmModule.forFeature([Post, Comment, PostVote, Bookmark])],
   providers: [PostsService],
   controllers: [PostsController]
 })
