@@ -1,0 +1,22 @@
+.header {
+  &__wrapper {
+    background: var(--nz-background-color);
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    font-size: var(--nz-heading-1-size);
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    max-width: 1000px;
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

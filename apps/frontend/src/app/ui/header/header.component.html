@@ -1,0 +1,24 @@
+<nz-header class="header header__wrapper">
+  <div nz-row>
+    <div nz-col [nzSpan]="6">
+      <div class="header__logo">
+        Post It!
+      </div>
+    </div>
+    <div nz-col [nzSpan]="10" class="header__search-wrapper">
+      <div class="header__search">
+        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+          <input type="text" nz-input placeholder="input search text" />
+        </nz-input-group>
+        <ng-template #suffixButton>
+          <button nz-button nzType="primary" nzSize="large" nzSearch>Search</button>
+        </ng-template>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6" [nzOffset]="1">
+      <div class="header__user-actions-wrapper">
+        Account
+      </div>
+    </div>
+  </div>
+</nz-header>

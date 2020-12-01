@@ -135,7 +135,8 @@
               "apps/frontend/src/assets"
             ],
             "styles": [
-              "apps/frontend/src/styles.scss"
+              "apps/frontend/src/styles.scss",
+              "apps/frontend/src/theme.less"
             ],
             "scripts": []
           },
