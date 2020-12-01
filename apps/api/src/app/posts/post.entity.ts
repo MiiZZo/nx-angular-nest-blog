@@ -24,6 +24,9 @@ export class Post {
   title: string;
 
   @Column()
+  previewBody: string;
+
+  @Column()
   body: string;
 
   @Column()
