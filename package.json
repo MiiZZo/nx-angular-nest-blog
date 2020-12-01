@@ -49,6 +49,7 @@
     "express-session": "^1.17.1",
     "ioredis": "^4.19.2",
     "mysql": "^2.18.1",
+    "ng-zorro-antd": "^10.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
